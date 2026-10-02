@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>手帳</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>📖 電子手帳</h1>
+    </header>
+    <div class="calendar">
+        <h2 id="today"></h2>
+        <h3>今日の思い出</h3>
+        <textarea id="diaryText" rows="10" placeholder="今日の出来事を書いてください"></textarea>
+        <br><br>
+        <label class="upload">
+            📷 写真を追加
+            <input type="file" accept="image/*">
+        </label>
+        <br><br>
+        <button onclick="saveDiary()">💾 保存</button>
+        <br><br>
+        <a href="calendar.html">← カレンダーへ戻る</a>
+    </div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const date = params.get("date");
+        document.getElementById("today").innerHTML = date;
+        function saveDiary() {
+            alert("保存しました！");
+        }
+    </script>
+</body>
+</html>

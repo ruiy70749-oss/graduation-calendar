@@ -1,0 +1,172 @@
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+
+const PORT = 3000;
+const EVENTS_FILE = path.join(__dirname, "events.json");
+
+const server = http.createServer((req, res) => {
+
+    // ==============================
+    // ① 读取共享日程
+    // ==============================
+    if (req.url === "/api/events" && req.method === "GET") {
+
+        fs.readFile(EVENTS_FILE, "utf8", (error, data) => {
+
+            if (error) {
+                res.writeHead(500, {
+                    "Content-Type": "application/json; charset=utf-8"
+                });
+
+                res.end(JSON.stringify({
+                    message: "データの読み込みに失敗しました"
+                }));
+
+                return;
+            }
+
+            res.writeHead(200, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(data);
+        });
+
+        return;
+    }
+
+
+    // ==============================
+    // ② 新しい共有日程を保存
+    // ==============================
+    if (req.url === "/api/events" && req.method === "POST") {
+
+        let body = "";
+
+        req.on("data", chunk => {
+            body += chunk.toString();
+        });
+
+        req.on("end", () => {
+
+            try {
+
+                const newEvent = JSON.parse(body);
+
+                fs.readFile(EVENTS_FILE, "utf8", (error, data) => {
+
+                    if (error) {
+                        res.writeHead(500, {
+                            "Content-Type": "application/json; charset=utf-8"
+                        });
+
+                        res.end(JSON.stringify({
+                            message: "データの読み込みに失敗しました"
+                        }));
+
+                        return;
+                    }
+
+                    let events = JSON.parse(data || "[]");
+
+                    newEvent.id = Date.now();
+
+                    events.push(newEvent);
+
+                    fs.writeFile(
+                        EVENTS_FILE,
+                        JSON.stringify(events, null, 2),
+                        "utf8",
+                        error => {
+
+                            if (error) {
+                                res.writeHead(500, {
+                                    "Content-Type": "application/json; charset=utf-8"
+                                });
+
+                                res.end(JSON.stringify({
+                                    message: "保存に失敗しました"
+                                }));
+
+                                return;
+                            }
+
+                            res.writeHead(201, {
+                                "Content-Type": "application/json; charset=utf-8"
+                            });
+
+                            res.end(JSON.stringify(newEvent));
+                        }
+                    );
+                });
+
+            } catch (error) {
+
+                res.writeHead(400, {
+                    "Content-Type": "application/json; charset=utf-8"
+                });
+
+                res.end(JSON.stringify({
+                    message: "データが正しくありません"
+                }));
+            }
+        });
+
+        return;
+    }
+
+
+    // ==============================
+    // ③ HTML / CSS / JS を表示
+    // ==============================
+
+    let filePath = req.url === "/"
+        ? path.join(__dirname, "index.html")
+        : path.join(__dirname, req.url.split("?")[0]);
+
+    const extname = path.extname(filePath);
+
+    let contentType = "text/html";
+
+    if (extname === ".css") {
+        contentType = "text/css";
+    }
+
+    if (extname === ".js") {
+        contentType = "text/javascript";
+    }
+
+    if (extname === ".json") {
+        contentType = "application/json";
+    }
+
+    fs.readFile(filePath, (error, content) => {
+
+        if (error) {
+
+            res.writeHead(404, {
+                "Content-Type": "text/plain; charset=utf-8"
+            });
+
+            res.end("ページが見つかりません");
+
+            return;
+        }
+
+        res.writeHead(200, {
+            "Content-Type": contentType + "; charset=utf-8"
+        });
+
+        res.end(content);
+    });
+
+});
+
+
+server.listen(PORT, () => {
+
+    console.log("サーバーが起動しました！");
+    console.log(`http://localhost:${PORT}`);
+
+});

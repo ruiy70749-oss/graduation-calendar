@@ -1,0 +1,227 @@
+/* ----- 全体の中央寄せと柔らかい色合い ----- */
+body {
+    margin: 0;
+    font-family: "Yu Gothic", "Hiragino Sans", sans-serif;
+    background: #faf0f3;          /* 極淡いピンクベージュ */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ----- ホームページ専用 ----- */
+body.home {
+    background: #faf0f3;
+}
+
+.home-box {
+    background: #ffffffec;
+    padding: 60px 48px;
+    border-radius: 40px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(200, 140, 165, 0.12);
+    border: 1px solid #fad8e5;
+    max-width: 500px;
+    width: 90%;
+}
+
+.home-box h1 {
+    font-size: 2.8rem;
+    font-weight: 450;
+    color: #372b31;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.start-btn {
+    background: #f5b2cc;
+    padding: 18px 50px;
+    border-radius: 60px;
+    font-size: 1.6rem;
+    text-decoration: none;
+    color: #2b1d24;
+    font-weight: 500;
+    display: inline-block;
+    border: 1px solid #f3c0d4;
+    box-shadow: 0 6px 16px rgba(200, 120, 150, 0.15);
+    transition: 0.25s;
+}
+
+.start-btn:hover {
+    background: #ed9ebd;
+    transform: scale(1.02);
+}
+
+/* ----- ヘッダー ----- */
+header {
+    width: 100%;
+    max-width: 900px;
+    background: linear-gradient(145deg, #fbc4d5, #f7a9c4);
+    color: #3d2c33;
+    text-align: center;
+    padding: 20px;
+    border-radius: 30px 30px 16px 16px;
+    box-shadow: 0 4px 14px rgba(190, 120, 140, 0.12);
+    margin-bottom: 24px;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 500;
+}
+header p {
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+/* ----- カレンダーカード ----- */
+.calendar {
+    width: 100%;
+    max-width: 900px;
+    background: #fffffffa;
+    padding: 24px 20px 30px;
+    border-radius: 36px;
+    box-shadow: 0 10px 24px rgba(210, 150, 170, 0.10);
+    border: 1px solid rgba(255, 215, 225, 0.3);
+    text-align: center;
+}
+
+.calendar h2 {
+    font-size: 1.8rem;
+    color: #4a3340;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.calendar h3 {
+    font-weight: 400;
+    color: #4a3841;
+    font-size: 1.3rem;
+    text-align: left;
+    border-left: 6px solid #f7b7ce;
+    padding-left: 16px;
+    margin: 16px 0 10px;
+}
+
+/* ----- テーブル (カレンダー) ----- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th {
+    background: #ffdce8;
+    padding: 12px 0;
+    font-weight: 500;
+    color: #3f2d35;
+}
+
+td {
+    border: 1px solid #f5dce4;
+    height: 76px;
+    vertical-align: top;
+    background: #fff9fb;
+    border-radius: 4px;
+}
+
+td a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 8px 4px;
+    text-decoration: none;
+    color: #2d2228;
+    border-radius: 4px;
+    transition: 0.15s;
+}
+
+td a:hover {
+    background: #ffe4ef;
+}
+
+.today {
+    background: #fbc8db !important;
+    font-weight: 600;
+}
+.today a {
+    background: #fbc8db !important;
+    color: #2f1a25;
+}
+
+/* ----- 日記ページ用 ----- */
+textarea {
+    width: 100%;
+    padding: 16px 18px;
+    font-size: 1rem;
+    border: 2px solid #fad4e2;
+    border-radius: 24px;
+    background: #fffbfd;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #f09bb9;
+    box-shadow: 0 0 0 4px #fad4e2;
+}
+
+.upload {
+    display: inline-block;
+    background: #fce2ec;
+    padding: 12px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    border: 1px solid #f3bace;
+    transition: 0.2s;
+    font-size: 1rem;
+}
+.upload:hover {
+    background: #f9d0df;
+}
+.upload input {
+    display: none;
+}
+
+button {
+    background: #f5b2cc;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 60px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #2d1e26;
+    cursor: pointer;
+    border: 1px solid #f3c0d4;
+    transition: 0.2s;
+}
+button:hover {
+    background: #f09bb9;
+    transform: translateY(-2px);
+}
+
+a {
+    color: #4a2f3b;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* ----- 戻るリンク ----- */
+.calendar a[href="calendar.html"] {
+    display: inline-block;
+    background: #f7e4ec;
+    padding: 10px 24px;
+    border-radius: 40px;
+    border: 1px solid #f3c8d9;
+    transition: 0.2s;
+}
+.calendar a[href="calendar.html"]:hover {
+    background: #fbd6e5;
+    text-decoration: none;
+}
