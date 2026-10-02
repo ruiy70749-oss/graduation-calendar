@@ -2,7 +2,9 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const PORT = 3000;
+// Render 会自动提供 PORT，本地运行时使用 3000
+const PORT = process.env.PORT || 3000;
+
 const EVENTS_FILE = path.join(__dirname, "events.json");
 
 const server = http.createServer((req, res) => {
@@ -30,7 +32,7 @@ const server = http.createServer((req, res) => {
                 "Content-Type": "application/json; charset=utf-8"
             });
 
-            res.end(data);
+            res.end(data || "[]");
         });
 
         return;
@@ -118,7 +120,105 @@ const server = http.createServer((req, res) => {
 
 
     // ==============================
-    // ③ HTML / CSS / JS を表示
+    // ③ 共有日程を削除
+    // ==============================
+    if (req.url.startsWith("/api/events/") && req.method === "DELETE") {
+
+        const id = Number(req.url.split("/").pop());
+
+        if (!id) {
+            res.writeHead(400, {
+                "Content-Type": "application/json; charset=utf-8"
+            });
+
+            res.end(JSON.stringify({
+                message: "IDが正しくありません"
+            }));
+
+            return;
+        }
+
+        fs.readFile(EVENTS_FILE, "utf8", (error, data) => {
+
+            if (error) {
+                res.writeHead(500, {
+                    "Content-Type": "application/json; charset=utf-8"
+                });
+
+                res.end(JSON.stringify({
+                    message: "データの読み込みに失敗しました"
+                }));
+
+                return;
+            }
+
+            try {
+
+                let events = JSON.parse(data || "[]");
+
+                const originalLength = events.length;
+
+                events = events.filter(event => Number(event.id) !== id);
+
+                if (events.length === originalLength) {
+
+                    res.writeHead(404, {
+                        "Content-Type": "application/json; charset=utf-8"
+                    });
+
+                    res.end(JSON.stringify({
+                        message: "予定が見つかりません"
+                    }));
+
+                    return;
+                }
+
+                fs.writeFile(
+                    EVENTS_FILE,
+                    JSON.stringify(events, null, 2),
+                    "utf8",
+                    error => {
+
+                        if (error) {
+                            res.writeHead(500, {
+                                "Content-Type": "application/json; charset=utf-8"
+                            });
+
+                            res.end(JSON.stringify({
+                                message: "削除に失敗しました"
+                            }));
+
+                            return;
+                        }
+
+                        res.writeHead(200, {
+                            "Content-Type": "application/json; charset=utf-8"
+                        });
+
+                        res.end(JSON.stringify({
+                            message: "予定を削除しました"
+                        }));
+                    }
+                );
+
+            } catch (error) {
+
+                res.writeHead(500, {
+                    "Content-Type": "application/json; charset=utf-8"
+                });
+
+                res.end(JSON.stringify({
+                    message: "データの処理に失敗しました"
+                }));
+            }
+        });
+
+        return;
+    }
+
+
+    // ==============================
+    // ④ HTML / CSS / JS を表示
     // ==============================
 
     let filePath = req.url === "/"
@@ -164,9 +264,9 @@ const server = http.createServer((req, res) => {
 });
 
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
 
     console.log("サーバーが起動しました！");
-    console.log(`http://localhost:${PORT}`);
+    console.log(`PORT: ${PORT}`);
 
 });
