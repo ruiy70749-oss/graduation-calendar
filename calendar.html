@@ -1,326 +1,583 @@
-<!DOCTYPE html> 
-<html lang="ja"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>電子カレンダー手帳</title> 
-    <link rel="stylesheet" href="css/style.css"> 
-</head> 
-<body> 
-    <header> 
-        <h1>📖 電子カレンダー手帳</h1> 
-        <p>予定と思い出を記録しよう</p> 
-    </header> 
+<!DOCTYPE html>
+<html lang="ja">
 
-    <div class="calendar"> 
-        <h2>2026年7月</h2> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電子カレンダー手帳</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
 
-        <table> 
-            <tr> 
-                <th>日</th>
-                <th>月</th>
-                <th>火</th>
-                <th>水</th>
-                <th>木</th>
-                <th>金</th>
-                <th>土</th> 
-            </tr> 
+<body>
 
-            <tr> 
-                <td></td>
-                <td></td>
-                <td></td> 
-                <td><a href="diary.html?date=2026-07-01" data-day="1">1</a></td> 
-                <td><a href="diary.html?date=2026-07-02" data-day="2">2</a></td> 
-                <td><a href="diary.html?date=2026-07-03" data-day="3">3</a></td> 
-                <td><a href="diary.html?date=2026-07-04" data-day="4">4</a></td> 
-            </tr> 
+    <header>
+        <h1>📖 電子カレンダー手帳</h1>
+        <p>予定と思い出を記録しよう</p>
+    </header>
 
-            <tr> 
-                <td><a href="diary.html?date=2026-07-05" data-day="5">5</a></td> 
-                <td><a href="diary.html?date=2026-07-06" data-day="6">6</a></td> 
-                <td><a href="diary.html?date=2026-07-07" data-day="7">7</a></td> 
-                <td><a href="diary.html?date=2026-07-08" data-day="8">8</a></td> 
-                <td><a href="diary.html?date=2026-07-09" data-day="9">9</a></td> 
-                <td><a href="diary.html?date=2026-07-10" data-day="10">10</a></td> 
-                <td><a href="diary.html?date=2026-07-11" data-day="11">11</a></td> 
-            </tr> 
+    <div class="calendar">
 
-            <tr> 
-                <td><a href="diary.html?date=2026-07-12" data-day="12">12</a></td> 
-                <td><a href="diary.html?date=2026-07-13" data-day="13">13</a></td> 
-                <td><a href="diary.html?date=2026-07-14" data-day="14">14</a></td> 
-                <td><a href="diary.html?date=2026-07-15" data-day="15">15</a></td> 
-                <td><a href="diary.html?date=2026-07-16" data-day="16">16</a></td> 
-                <td><a href="diary.html?date=2026-07-17" data-day="17">17</a></td> 
-                <td><a href="diary.html?date=2026-07-18" data-day="18">18</a></td> 
-            </tr> 
+        <!-- 月の切り替え -->
+        <div style="display:flex; justify-content:center; align-items:center; gap:20px;">
+            <button type="button" onclick="changeMonth(-1)">← 前月</button>
 
-            <tr> 
-                <td><a href="diary.html?date=2026-07-19" data-day="19">19</a></td> 
-                <td><a href="diary.html?date=2026-07-20" data-day="20">20</a></td> 
-                <td><a href="diary.html?date=2026-07-21" data-day="21">21</a></td> 
-                <td><a href="diary.html?date=2026-07-22" data-day="22">22</a></td> 
-                <td><a href="diary.html?date=2026-07-23" data-day="23">23</a></td> 
-                <td><a href="diary.html?date=2026-07-24" data-day="24">24</a></td> 
-                <td><a href="diary.html?date=2026-07-25" data-day="25">25</a></td> 
-            </tr> 
+            <h2 id="monthTitle"></h2>
 
-            <tr> 
-                <td><a href="diary.html?date=2026-07-26" data-day="26">26</a></td> 
-                <td><a href="diary.html?date=2026-07-27" data-day="27">27</a></td> 
-                <td><a href="diary.html?date=2026-07-28" data-day="28">28</a></td> 
-                <td><a href="diary.html?date=2026-07-29" data-day="29">29</a></td> 
-                <td><a href="diary.html?date=2026-07-30" data-day="30">30</a></td> 
-                <td><a href="diary.html?date=2026-07-31" data-day="31">31</a></td> 
-                <td></td> 
-            </tr> 
-        </table> 
+            <button type="button" onclick="changeMonth(1)">次月 →</button>
+        </div>
 
+        <!-- カレンダー -->
+        <table>
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>月</th>
+                    <th>火</th>
+                    <th>水</th>
+                    <th>木</th>
+                    <th>金</th>
+                    <th>土</th>
+                </tr>
+            </thead>
+
+            <tbody id="calendarBody">
+            </tbody>
+        </table>
+
+
+        <!-- 共有予定 -->
         <div class="event-form">
-    <h3>📅 共有予定を追加</h3>
 
-    <input type="date" id="eventDate">
+            <h3>📅 共有予定を追加</h3>
 
-    <input type="text" id="eventTitle" placeholder="予定を入力してください">
+            <input type="date" id="eventDate">
 
-    <button type="button" onclick="addEvent()">予定を追加</button>
-</div>
+            <input
+                type="text"
+                id="eventTitle"
+                placeholder="予定を入力してください"
+            >
 
-        <!-- ===== 友達と共有機能 ===== --> 
-        <div class="share-section"> 
+            <button type="button" onclick="addEvent()">
+                予定を追加
+            </button>
+
+        </div>
+
+
+        <!-- ===== 友達と共有機能 ===== -->
+
+        <div class="share-section">
 
             <h3>👥 友達と共有</h3>
-            <div class="share-input-area"> 
 
-                <label for="friendName">友達の名前：</label> 
-                <input 
-                    type="text" 
-                    id="friendName" 
-                    placeholder="例：田中さん" 
+            <div class="share-input-area">
+
+                <label for="friendName">友達の名前：</label>
+
+                <input
+                    type="text"
+                    id="friendName"
+                    placeholder="例：田中さん"
                     class="share-input"
-                > 
-                 
-                <label for="shareMemo">共有する内容：</label> 
+                >
 
-                <textarea 
-                    id="shareMemo" 
-                    rows="3" 
-                    placeholder="共有する内容を入力してください" 
+                <label for="shareMemo">共有する内容：</label>
+
+                <textarea
+                    id="shareMemo"
+                    rows="3"
+                    placeholder="共有する内容を入力してください"
                     class="share-textarea"
-                ></textarea> 
-                 
-                <button 
-                    onclick="saveSharedData()" 
+                ></textarea>
+
+                <button
+                    type="button"
+                    onclick="saveSharedData()"
                     class="share-btn"
                 >
                     💾 共有する
-                </button> 
+                </button>
 
-            </div> 
-             
-            <!-- 保存した共有データを表示 --> 
-            <div id="sharedList" class="shared-list"> 
+            </div>
 
-                <h4>📋 共有履歴</h4> 
+            <div id="sharedList" class="shared-list">
 
-                <ul id="sharedItems"></ul> 
+                <h4>📋 共有履歴</h4>
 
-            </div> 
+                <ul id="sharedItems"></ul>
 
-        </div> 
-        <!-- ===== ここまで ===== --> 
+            </div>
 
-    </div> 
+        </div>
 
-    <script> 
+        <!-- ===== ここまで ===== -->
 
-        // 自動で今日の日付をハイライト 
-        const today = new Date(); 
-        const todayDay = today.getDate(); 
-
-        const links = document.querySelectorAll('td a[data-day]'); 
-
-        links.forEach(link => { 
-            const day = parseInt(link.getAttribute('data-day')); 
-
-            if (day === todayDay) { 
-                link.parentElement.classList.add('today'); 
-            } 
-        }); 
+    </div>
 
 
-        // ===== 友達と共有 (LocalStorage保存) ===== 
-        function saveSharedData() { 
+<script>
 
-            const friendName = document.getElementById('friendName').value.trim(); 
-            const shareMemo = document.getElementById('shareMemo').value.trim(); 
+    // ==========================================
+    // カレンダー
+    // ==========================================
 
-            if (!friendName || !shareMemo) { 
-                alert('⚠️ 友達の名前と共有内容を両方入力してください'); 
-                return; 
-            } 
+    const today = new Date();
 
-            // LocalStorageから既存データを取得 
-            let sharedData = JSON.parse(localStorage.getItem('sharedData')) || []; 
+    // 最初に現在の年月を表示
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth();
 
-            // 新しいデータを作成 
-            const newData = { 
-                id: Date.now(), 
-                friendName: friendName, 
-                shareMemo: shareMemo, 
-                date: new Date().toLocaleString('ja-JP'), 
-                timestamp: new Date().getTime() 
-            }; 
-
-            // 追加 
-            sharedData.unshift(newData); 
-
-            // LocalStorageに保存 
-            localStorage.setItem('sharedData', JSON.stringify(sharedData)); 
-
-            // 表示を更新 
-            displaySharedData(); 
-
-            // 入力フィールドをクリア 
-            document.getElementById('friendName').value = ''; 
-            document.getElementById('shareMemo').value = ''; 
-
-            alert('✅ 共有内容を保存しました！'); 
-        } 
+    let savedEvents = [];
 
 
-        function displaySharedData() { 
+    function formatDate(year, month, day) {
 
-            const sharedData = JSON.parse(localStorage.getItem('sharedData')) || []; 
-            const listElement = document.getElementById('sharedItems'); 
+        const monthText = String(month + 1).padStart(2, "0");
+        const dayText = String(day).padStart(2, "0");
 
-            if (sharedData.length === 0) { 
+        return `${year}-${monthText}-${dayText}`;
+    }
 
-                listElement.innerHTML = 
-                    '<li style="color:#999; list-style:none;">共有履歴はありません</li>'; 
 
-                return; 
-            } 
+    function renderCalendar() {
 
-            listElement.innerHTML = sharedData.map(item => ` 
-                <li class="shared-item"> 
-                    <strong>👤 ${item.friendName}</strong> 
-                    <span class="shared-date">${item.date}</span> 
-                    <p class="shared-memo">${item.shareMemo}</p> 
-                    <button 
-                        onclick="deleteSharedData(${item.id})" 
+        const monthTitle = document.getElementById("monthTitle");
+        const calendarBody = document.getElementById("calendarBody");
+
+        monthTitle.textContent =
+            `${currentYear}年${currentMonth + 1}月`;
+
+        calendarBody.innerHTML = "";
+
+        // 月の1日
+        const firstDay =
+            new Date(currentYear, currentMonth, 1).getDay();
+
+        // 月の最終日
+        const daysInMonth =
+            new Date(currentYear, currentMonth + 1, 0).getDate();
+
+
+        let day = 1;
+
+        // 最大6週間
+        for (let week = 0; week < 6; week++) {
+
+            const row = document.createElement("tr");
+
+            for (let weekday = 0; weekday < 7; weekday++) {
+
+                const cell = document.createElement("td");
+
+                if (
+                    (week === 0 && weekday < firstDay) ||
+                    day > daysInMonth
+                ) {
+
+                    cell.innerHTML = "";
+
+                } else {
+
+                    const dateString =
+                        formatDate(currentYear, currentMonth, day);
+
+                    const link = document.createElement("a");
+
+                    link.href =
+                        `diary.html?date=${dateString}`;
+
+                    link.setAttribute("data-day", day);
+
+                    link.textContent = day;
+
+
+                    // 今日をハイライト
+                    if (
+                        currentYear === today.getFullYear() &&
+                        currentMonth === today.getMonth() &&
+                        day === today.getDate()
+                    ) {
+
+                        cell.classList.add("today");
+                    }
+
+
+                    // この日の共有予定を表示
+                    const dayEvents = savedEvents.filter(
+                        event => event.date === dateString
+                    );
+
+                    dayEvents.forEach(event => {
+
+                        const eventText =
+                            document.createElement("div");
+
+                        
+
+                        eventText.textContent = event.title + " 🗑️";
+
+eventText.style.fontSize = "12px";
+eventText.style.marginTop = "5px";
+eventText.style.color = "#c45b82";
+eventText.style.cursor = "pointer";
+
+eventText.onclick = function(eventClick) {
+
+    // 点击予定时，不进入日记页面
+    eventClick.preventDefault();
+    eventClick.stopPropagation();
+
+    deleteEvent(event.id, event.title);
+};
+
+link.appendChild(eventText);
+                    });
+
+
+                    cell.appendChild(link);
+
+                    day++;
+                }
+
+                row.appendChild(cell);
+            }
+
+            calendarBody.appendChild(row);
+
+            if (day > daysInMonth) {
+                break;
+            }
+        }
+    }
+
+
+    // 前月・次月
+    function changeMonth(amount) {
+
+        currentMonth += amount;
+
+        if (currentMonth < 0) {
+
+            currentMonth = 11;
+            currentYear--;
+
+        } else if (currentMonth > 11) {
+
+            currentMonth = 0;
+            currentYear++;
+        }
+
+        renderCalendar();
+    }
+
+
+
+    // ==========================================
+    // 友達と共有（LocalStorage）
+    // ==========================================
+
+    function saveSharedData() {
+
+        const friendName =
+            document.getElementById("friendName").value.trim();
+
+        const shareMemo =
+            document.getElementById("shareMemo").value.trim();
+
+
+        if (!friendName || !shareMemo) {
+
+            alert(
+                "⚠️ 友達の名前と共有内容を両方入力してください"
+            );
+
+            return;
+        }
+
+
+        let sharedData =
+            JSON.parse(localStorage.getItem("sharedData")) || [];
+
+
+        const newData = {
+
+            id: Date.now(),
+
+            friendName: friendName,
+
+            shareMemo: shareMemo,
+
+            date: new Date().toLocaleString("ja-JP"),
+
+            timestamp: new Date().getTime()
+        };
+
+
+        sharedData.unshift(newData);
+
+        localStorage.setItem(
+            "sharedData",
+            JSON.stringify(sharedData)
+        );
+
+
+        displaySharedData();
+
+
+        document.getElementById("friendName").value = "";
+
+        document.getElementById("shareMemo").value = "";
+
+
+        alert("✅ 共有内容を保存しました！");
+    }
+
+
+
+    function displaySharedData() {
+
+        const sharedData =
+            JSON.parse(localStorage.getItem("sharedData")) || [];
+
+        const listElement =
+            document.getElementById("sharedItems");
+
+
+        if (sharedData.length === 0) {
+
+            listElement.innerHTML =
+                '<li style="color:#999; list-style:none;">共有履歴はありません</li>';
+
+            return;
+        }
+
+
+        listElement.innerHTML =
+            sharedData.map(item => `
+
+                <li class="shared-item">
+
+                    <strong>
+                        👤 ${item.friendName}
+                    </strong>
+
+                    <span class="shared-date">
+                        ${item.date}
+                    </span>
+
+                    <p class="shared-memo">
+                        ${item.shareMemo}
+                    </p>
+
+                    <button
+                        onclick="deleteSharedData(${item.id})"
                         class="delete-btn"
                     >
                         🗑️ 削除
-                    </button> 
-                </li> 
-            `).join(''); 
-        } 
+                    </button>
+
+                </li>
+
+            `).join("");
+    }
 
 
-        function deleteSharedData(id) { 
 
-            if (!confirm('この共有内容を削除しますか？')) return; 
+    function deleteSharedData(id) {
 
-            let sharedData = JSON.parse(localStorage.getItem('sharedData')) || []; 
-
-            sharedData = sharedData.filter(item => item.id !== id); 
-
-            localStorage.setItem('sharedData', JSON.stringify(sharedData)); 
-
-            displaySharedData(); 
-        } 
+        if (!confirm("この共有内容を削除しますか？")) {
+            return;
+        }
 
 
-        // ページ読み込み時に表示 
-        document.addEventListener('DOMContentLoaded', displaySharedData); 
+        let sharedData =
+            JSON.parse(localStorage.getItem("sharedData")) || [];
 
-    // ===== 共有予定をサーバーに保存 =====
-async function addEvent() {
 
-    const date = document.getElementById("eventDate").value;
-    const title = document.getElementById("eventTitle").value.trim();
+        sharedData =
+            sharedData.filter(item => item.id !== id);
 
-    if (!date || !title) {
-        alert("日付と予定を入力してください");
+
+        localStorage.setItem(
+            "sharedData",
+            JSON.stringify(sharedData)
+        );
+
+
+        displaySharedData();
+    }
+
+
+
+    // ==========================================
+    // 共有予定をサーバーに保存
+    // ==========================================
+
+    async function addEvent() {
+
+        const date =
+            document.getElementById("eventDate").value;
+
+        const title =
+            document.getElementById("eventTitle").value.trim();
+
+
+        if (!date || !title) {
+
+            alert("日付と予定を入力してください");
+
+            return;
+        }
+
+
+        const newEvent = {
+
+            date: date,
+
+            title: title
+        };
+
+
+        try {
+
+            const response =
+                await fetch("/api/events", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(newEvent)
+                });
+
+
+            if (!response.ok) {
+
+                throw new Error("保存に失敗しました");
+            }
+
+
+            alert("予定を保存しました！");
+
+
+            document.getElementById("eventDate").value = "";
+
+            document.getElementById("eventTitle").value = "";
+
+
+            // 保存後に最新予定を読み込む
+            await loadEvents();
+
+
+        } catch (error) {
+
+            alert("エラーが発生しました");
+
+            console.error(error);
+        }
+    }
+
+
+
+    // ==========================================
+    // サーバーから共有予定を読み込む
+    // ==========================================
+// ==========================================
+// 共有予定を削除
+// ==========================================
+
+async function deleteEvent(id, title) {
+
+    const result = confirm(
+        `「${title}」を削除しますか？`
+    );
+
+    if (!result) {
         return;
     }
 
-    const newEvent = {
-        date: date,
-        title: title
-    };
-
     try {
-        const response = await fetch("/api/events", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newEvent)
+
+        const response = await fetch(`/api/events/${id}`, {
+            method: "DELETE"
         });
 
         if (!response.ok) {
-            throw new Error("保存に失敗しました");
+            throw new Error("削除に失敗しました");
         }
 
-        alert("予定を保存しました！");
+        alert("予定を削除しました！");
 
-        document.getElementById("eventDate").value = "";
-        document.getElementById("eventTitle").value = "";
+        // 削除後、最新の予定を再読み込み
+        await loadEvents();
 
     } catch (error) {
-        alert("エラーが発生しました");
+
+        alert("予定の削除中にエラーが発生しました");
+
         console.error(error);
     }
 }
+    async function loadEvents() {
 
-// ===== サーバーから共有予定を読み込む =====
-async function loadEvents() {
-    try {
-        const response = await fetch("/api/events");
+        try {
 
-        if (!response.ok) {
-            throw new Error("予定の読み込みに失敗しました");
-        }
+            const response =
+                await fetch("/api/events");
 
-        const events = await response.json();
 
-        console.log("保存されている予定：", events);
-        events.forEach(event => {
-    const eventDate = new Date(event.date + "T00:00:00");
+            if (!response.ok) {
 
-    // 这个页面目前是 2026年7月，所以只显示 2026年7月的予定
-    if (eventDate.getFullYear() === 2026 && eventDate.getMonth() === 6) {
+                throw new Error(
+                    "予定の読み込みに失敗しました"
+                );
+            }
 
-        const day = eventDate.getDate();
 
-        const dayLink = document.querySelector(
-            `td a[data-day="${day}"]`
-        );
+            savedEvents = await response.json();
 
-        if (dayLink) {
-            const eventText = document.createElement("div");
 
-            eventText.textContent = event.title;
-            eventText.style.fontSize = "12px";
-            eventText.style.marginTop = "5px";
-            eventText.style.color = "#c45b82";
+            console.log(
+                "保存されている予定：",
+                savedEvents
+            );
 
-            dayLink.appendChild(eventText);
+
+            renderCalendar();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            // 予定取得に失敗してもカレンダーは表示
+            renderCalendar();
         }
     }
-});
 
-    } catch (error) {
-        console.error(error);
-    }
-}
 
-// ページを開いた時に予定を読み込む
-loadEvents();
-</script> 
 
-</body> 
+    // ==========================================
+    // ページ読み込み
+    // ==========================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            displaySharedData();
+
+            renderCalendar();
+
+            loadEvents();
+        }
+    );
+
+</script>
+
+</body>
+
 </html>
